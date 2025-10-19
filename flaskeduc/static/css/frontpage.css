@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans', sans-serif;
+}
+
+body {
+    padding-top: 70px;
+    background: #f9f9f9;
+}
+
+/* --- NAVIGATION BAR --- */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 70px;
+    background: #006eff;
+    z-index: 1000;
+}
+
+nav .navbar {
+    height: 100%;
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 50px;
+}
+
+nav .logo a {
+    text-decoration: none;
+    color: white;
+    font-size: 25px;
+    font-weight: 600;
+}
+
+nav .nav-links .links {
+    display: flex;
+}
+
+nav .nav-links .links li {
+    list-style: none;
+    position: relative;
+}
+
+nav .nav-links .links li a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 0 20px;
+    display: inline-block;
+    height: 70px;
+    line-height: 70px;
+}
+
+nav .nav-links .links li a:hover,
+nav .nav-links .links li a.active {
+    background: #00f85f;
+    color: black;
+    border-radius: 4px;
+    transition: .3s ease;
+}
+
+nav .dropdown {
+    position: absolute;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #00f85f;
+    display: none;
+    border-radius: 0 0 4px 4px;
+    min-width: 180px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+nav .nav-links .links li:hover .dropdown {
+    display: block;
+}
+
+nav .dropdown li a {
+    color: black;
+    font-size: 15px;
+    padding: 0 22px;
+    height: 40px;
+    line-height: 40px;
+    display: block;
+    width: 100%;
+}
+
+nav .dropdown li a:hover {
+    background: #00d64f;
+    color: white;
+    border-radius: 0;
+}
+
+/* --- HERO SECTION --- */
+.hero-section {
+    text-align: center;
+    margin-top: 40px;
+    padding: 40px 20px;
+}
+
+.founder-img {
+    width: 250px;
+    max-width: 90%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+.quote-box {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.quote {
+    font-size: 20px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.author {
+    font-size: 16px;
+    font-style: italic;
+    color: #777;
+}

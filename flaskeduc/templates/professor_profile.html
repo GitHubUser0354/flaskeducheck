@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professor Profile - {{ professor.firstname }} {{ professor.lastname }}</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .profile-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .header h1 {
+      color: #333;
+      font-size: 28px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background-color: #667eea;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #5568d3;
+      transform: translateY(-2px);
+    }
+
+    .btn-edit {
+      background-color: #28a745;
+    }
+
+    .btn-edit:hover {
+      background-color: #218838;
+    }
+
+    .btn-logout {
+      background-color: #e74c3c;
+    }
+
+    .btn-logout:hover {
+      background-color: #c0392b;
+    }
+
+    .profile-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .info-card {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+
+    .info-card label {
+      color: #666;
+      font-weight: bold;
+      font-size: 12px;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .info-card p {
+      color: #333;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .classes-section {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      color: #333;
+      font-size: 22px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #667eea;
+    }
+
+    .classes-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 15px;
+    }
+
+    .class-item {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+
+    .class-code {
+      background: #667eea;
+      color: white;
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 3px;
+      font-weight: bold;
+      font-size: 11px;
+      margin-bottom: 8px;
+    }
+
+    .class-name {
+      color: #333;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .class-details {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .no-classes {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+    }
+
+    .flash-container {
+      margin-bottom: 20px;
+    }
+
+    .flash {
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .flash.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .flash.info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+
+    @media (max-width: 768px) {
+      .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-buttons {
+        width: 100%;
+      }
+
+      .nav-buttons .btn {
+        flex: 1;
+        text-align: center;
+      }
+
+      .profile-info {
+        grid-template-columns: 1fr;
+      }
+
+      .classes-list {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-container">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="header">
+      <div class="header-top">
+        <h1>Professor Profile</h1>
+        <div class="nav-buttons">
+          <a href="{{ url_for('auth.professor_edit_profile') }}" class="btn btn-edit">Edit Profile</a>
+          <a href="{{ url_for('auth.professor_dashboard') }}" class="btn">Back to Dashboard</a>
+          <a href="{{ url_for('auth.professor_logout') }}" class="btn btn-logout">Logout</a>
+        </div>
+      </div>
+
+      <div class="profile-info">
+        <div class="info-card">
+          <label>Full Name</label>
+          <p>{{ professor.firstname }} {{ professor.middlename }} {{ professor.lastname }}</p>
+        </div>
+        <div class="info-card">
+          <label>Professor ID</label>
+          <p>{{ professor.professorid }}</p>
+        </div>
+        <div class="info-card">
+          <label>Contact Number</label>
+          <p>{{ professor.contactnum }}</p>
+        </div>
+        <div class="info-card">
+          <label>University/College Graduated From</label>
+          <p>{{ professor.graduate }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="classes-section">
+      <h2 class="section-title">Classes Teaching</h2>
+      {% if subjects_teaching %}
+        <div class="classes-list">
+          {% for subject in subjects_teaching %}
+            <div class="class-item">
+              <div class="class-code">{{ subject.code }}</div>
+              <div class="class-name">{{ subject.name }}</div>
+              <div class="class-details">
+                <strong>Course:</strong> {{ subject.course }}<br>
+                <strong>Level:</strong> {{ subject.level }}<br>
+                <strong>Units:</strong> {{ subject.units }}<br>
+                <strong>Instructor:</strong> {{ subject.instructor }}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="no-classes">
+          <p>No classes assigned yet</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

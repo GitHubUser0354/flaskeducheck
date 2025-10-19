@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ college.firstname }}'s Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2>EduCheck LMS</h2>
+    <ul>
+      <li><a href="#">📚 Courses</a></li>
+      <li><a href="{{ url_for('auth.attendance') }}">🧾 Attendance</a></li>
+      <li><a href="{{ url_for('auth.attendance_records') }}">📅 Attendance Records</a></li>
+      <li><a href="{{ url_for('auth.college_subjects') }}">📂 Documents</a></li>
+      <li><a href="#">🗞️ Announcements</a></li>
+      <li><a href="{{ url_for('auth.college_profile') }}">👤 Profile</a></li>
+      <li><a href="{{ url_for('auth.logout') }}" class="logout">🚪 Logout</a></li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <header>
+      <h1>Welcome, {{ college.firstname }} {{ college.lastname }}</h1>
+      <p>Student ID: {{ college.collegeid }}</p>
+    </header>
+
+    <section class="overview">
+      <div class="card">
+        <h3>📚 Course</h3>
+        <p>{{ college.courses }}</p>
+      </div>
+
+      <div class="card">
+        <h3>🎓 Year Level</h3>
+        <p>{{ college.level }}</p>
+      </div>
+
+      <div class="card">
+        <h3>📅 Attendance</h3>
+        <p><a href="{{ url_for('auth.attendance') }}" class="mark-btn">Mark Attendance</a></p>
+      </div>
+    </section>
+
+    <section class="documents">
+      <h2>📂 Uploaded Documents</h2>
+      <ul>
+        <li><strong>Birth Certificate:</strong> <a href="{{ college.birthcert }}" target="_blank">View</a></li>
+        <li><strong>Transcript:</strong> <a href="{{ college.transcipt }}" target="_blank">View</a></li>
+        <li><strong>Good Moral:</strong> <a href="{{ college.goodmoral }}" target="_blank">View</a></li>
+      </ul>
+    </section>
+  </div>
+
+</body>
+</html>

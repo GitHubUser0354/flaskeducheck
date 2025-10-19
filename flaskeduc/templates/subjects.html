@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Subjects - {{ college.courses }}</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .subjects-container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .header h1 {
+      color: #333;
+      font-size: 28px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nav-buttons a {
+      padding: 10px 20px;
+      background-color: #667eea;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .nav-buttons a:hover {
+      background-color: #5568d3;
+      transform: translateY(-2px);
+    }
+
+    .info-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .info-box {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+
+    .info-box label {
+      display: block;
+      color: #666;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .info-box p {
+      color: #333;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .subjects-section {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #667eea;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .section-header h2 {
+      color: #333;
+      font-size: 24px;
+    }
+
+    .units-badge {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .subjects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .subject-card {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      border-radius: 8px;
+      padding: 20px;
+      transition: all 0.3s ease;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .subject-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .subject-code {
+      background: #667eea;
+      color: white;
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .subject-name {
+      color: #333;
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .subject-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+
+    .detail {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: #555;
+    }
+
+    .detail-label {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .detail-value {
+      color: #666;
+    }
+
+    .subject-instructor {
+      background: white;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 13px;
+      color: #555;
+      border-left: 3px solid #764ba2;
+      margin-top: 10px;
+    }
+
+    .instructor-icon {
+      margin-right: 5px;
+      color: #764ba2;
+    }
+
+    .no-subjects {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+    }
+
+    .no-subjects p {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .no-subjects small {
+      display: block;
+      color: #bbb;
+      margin-top: 10px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      opacity: 0.9;
+      text-transform: uppercase;
+    }
+
+    .flash-container {
+      margin-bottom: 20px;
+    }
+
+    .flash {
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .flash.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .flash.info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+
+    @media (max-width: 768px) {
+      .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .subjects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .subject-details {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="subjects-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-container">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="header">
+      <div class="header-top">
+        <h1>📚 My Subjects</h1>
+        <div class="nav-buttons">
+          <a href="{{ url_for('auth.college_dashboard') }}">⬅️ Back to Dashboard</a>
+          <a href="{{ url_for('auth.college_profile') }}">👤 My Profile</a>
+          <a href="{{ url_for('auth.college_grades') }}" class="btn">📊 Grades & Pass Output</a>
+
+        </div>
+      </div>
+
+      <div class="info-section">
+        <div class="info-box">
+          <label>Course</label>
+          <p>{{ college.courses }}</p>
+        </div>
+        <div class="info-box">
+          <label>Year Level</label>
+          <p>{{ college.level }}</p>
+        </div>
+        <div class="info-box">
+          <label>Student ID</label>
+          <p>{{ college.collegeid }}</p>
+        </div>
+        <div class="info-box">
+          <label>Name</label>
+          <p>{{ college.firstname }} {{ college.lastname }}</p>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">{{ subjects|length }}</div>
+          <div class="stat-label">Total Subjects</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">{{ total_units }}</div>
+          <div class="stat-label">Total Units</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subjects-section">
+      <div class="section-header">
+        <h2>📖 Subject List</h2>
+        <div class="units-badge">💳 Total Units: {{ total_units }}</div>
+      </div>
+
+      {% if subjects %}
+        <div class="subjects-grid">
+          {% for subject in subjects %}
+            <div class="subject-card">
+              <div class="subject-code">{{ subject.code }}</div>
+              <div class="subject-name">{{ subject.name }}</div>
+              
+              <div class="subject-details">
+                <div class="detail">
+                  <span class="detail-label">Units:</span>
+                  <span class="detail-value">{{ subject.units }}</span>
+                </div>
+                <div class="detail">
+                  <span class="detail-label">Level:</span>
+                  <span class="detail-value">{{ subject.level }}</span>
+                </div>
+              </div>
+
+              {% if subject.instructor %}
+                <div class="subject-instructor">
+                  <span class="instructor-icon">👨‍🏫</span>
+                  <strong>Instructor:</strong> {{ subject.instructor }}
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="no-subjects">
+          <p>📭 No subjects available</p>
+          <small>Subjects will appear here once they are configured for your course and year level.</small>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

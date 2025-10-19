@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Attendance Records</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+
+  <div class="records-container">
+    <h1>Attendance Records for {{ college.firstname }} {{ college.lastname }}</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-container">
+          {% for category, message in messages %}
+            <p class="flash {{ category }}">{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="actions">
+      <a href="{{ url_for('auth.attendance') }}" class="btn">📸 Mark Attendance</a>
+      <a href="{{ url_for('auth.college_dashboard') }}" class="btn">⬅️ Back to Dashboard</a>
+    </div>
+
+    <table border="1" cellpadding="8" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Time In</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in records %}
+        <tr>
+          <td>{{ record.date }}</td>
+          <td>{{ record.time_in.strftime('%H:%M:%S') }}</td>
+          <td>{{ record.status }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3">No attendance records found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>

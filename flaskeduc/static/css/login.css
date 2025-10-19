@@ -1,0 +1,191 @@
+ body {
+     margin: 0;
+     padding: 0;
+     font-family: 'Poppins', sans-serif;
+     background: linear-gradient(135deg, #5B86E5, #36D1DC);
+     height: 100vh;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+ }
+
+ .formwrap {
+     width: 400px;
+     background: rgba(255, 255, 255, 0.1);
+     border-radius: 20px;
+     backdrop-filter: blur(12px);
+     padding: 30px;
+     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+     color: white;
+     text-align: center;
+     animation: fadeIn 0.7s ease-in-out;
+ }
+
+ .tab {
+     font-size: 18px;
+     font-weight: 600;
+     color: white;
+     display: inline-block;
+     margin: 0 10px 20px;
+     cursor: pointer;
+     transition: color 0.3s;
+     padding: 10px 20px;
+ }
+
+ .tab:hover {
+     color: #36D1DC;
+ }
+
+ input[type="radio"] {
+     display: none;
+ }
+
+ #tab-1:checked+label {
+     border-bottom: 3px solid #36D1DC;
+ }
+
+ #tab-2:checked+label {
+     border-bottom: 3px solid #36D1DC;
+ }
+
+ .studentform {
+     margin-top: 20px;
+ }
+
+ .studentshtml,
+ .professorshtml {
+     display: none;
+ }
+
+ #tab-1:checked~.studentform .studentshtml {
+     display: block;
+     animation: slideIn 0.5s ease;
+ }
+
+ #tab-2:checked~.studentform .professorshtml {
+     display: block;
+     animation: slideIn 0.5s ease;
+ }
+
+ .group {
+     margin-bottom: 18px;
+     text-align: left;
+ }
+
+ .check-group {
+     display: flex;
+     align-items: center;
+     text-align: left;
+ }
+
+ .check-group label {
+     margin-left: 8px;
+     font-size: 0.85em;
+ }
+
+ .label {
+     display: block;
+     font-size: 0.9em;
+     margin-bottom: 6px;
+ }
+
+ .input {
+     width: 100%;
+     padding: 10px;
+     border: none;
+     border-radius: 8px;
+     background: rgba(255, 255, 255, 0.2);
+     color: white;
+     outline: none;
+     transition: all 0.3s;
+     box-sizing: border-box;
+ }
+
+ .input::placeholder {
+     color: rgba(255, 255, 255, 0.6);
+ }
+
+ .input:focus {
+     background: rgba(255, 255, 255, 0.35);
+ }
+
+ .button {
+     width: 100%;
+     padding: 10px;
+     border: none;
+     border-radius: 8px;
+     background: #36D1DC;
+     color: white;
+     font-weight: bold;
+     cursor: pointer;
+     transition: 0.3s;
+ }
+
+ .button:hover {
+     background: #5B86E5;
+     transform: scale(1.05);
+ }
+
+ .button.secondary {
+     background: transparent;
+     border: 2px solid #36D1DC;
+ }
+
+ .button.secondary:hover {
+     background: #36D1DC;
+     color: #fff;
+ }
+
+ .hr {
+     height: 1px;
+     background: rgba(255, 255, 255, 0.3);
+     margin: 20px 0;
+ }
+
+ .foot-lnk {
+     margin-top: 10px;
+ }
+
+ .foot-lnk a {
+     color: #fff;
+     text-decoration: none;
+     font-size: 0.85em;
+ }
+
+ .foot-lnk a:hover {
+     color: #36D1DC;
+ }
+
+ @keyframes fadeIn {
+     from {
+         opacity: 0;
+         transform: translateY(20px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ @keyframes slideIn {
+     from {
+         opacity: 0;
+         transform: translateX(30px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+ input[type=number]::-webkit-inner-spin-button,
+ input[type=number]::-webkit-outer-spin-button {
+     -webkit-appearance: none;
+     margin: 0;
+ }
+
+ input[type=number] {
+     -moz-appearance: textfield;
+ }

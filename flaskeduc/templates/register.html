@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Registration</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    .form-page { display: none; }
+    .form-page.active { display: block; }
+    .navigation-buttons { display: flex; justify-content: space-between; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <div class="register-card">
+      <h2>Student Registration</h2>
+      <form method="POST" action="/register">
+        <!-- Page 1 -->
+        <div class="form-page active" id="page1">
+          <div class="input-group">
+            <label>Facial Recognition</label>
+            <a href="{{ url_for('auth.facialrecognition') }}" class="face-btn" name="facepath">Capture Face</a>
+          </div>
+          <div class="input-group">
+            <label for="firstname">First Name</label>
+            <input type="text" id="firstname" name="firstname" placeholder="Enter your first name" required>
+          </div>
+          <div class="input-group">
+            <label for="middlename">Middle Name</label>
+            <input type="text" id="middlename" name="middlename" placeholder="Enter your middle name">
+          </div>
+          <div class="input-group">
+            <label for="lastname">Last Name</label>
+            <input type="text" id="lastname" name="lastname" placeholder="Enter your last name" required>
+          </div>
+          <div class="input-group">
+            <label for="contactnum">Contact Number</label>
+            <input type="text" id="contactnum" name="contactnum" placeholder="09XXXXXXXXX" required>
+          </div>
+          <div class="input-group">
+            <label for="email">Enter Email</label>
+            <input type="text" id="email" name="email" placeholder="youremail@gmail.com" required>
+          </div>
+          
+
+          <div class="navigation-buttons">
+            <span></span>
+            <button type="button" onclick="nextPage()" id="nextbtn" class="nextbtn">Next</button>
+          </div>
+        </div>
+
+        <div class="form-page" id="page2">
+           <div class="input-group">
+            <label for="studentid">Student ID</label>
+            <input type="number" id="studentid" name="studentid" placeholder="Enter your Student ID" required>
+          </div>
+          <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+          </div>
+          <div class="input-group">
+            <label for="address">Enter Address</label>
+            <input type="text" id="address" name="address" required>
+          </div>
+          <div class="input-group">
+            <label for="birthDate">Enter Birthdate</label>
+            <input type="date" id="birthDate" name="birthDate" required>
+          </div>
+          <div class="input-group">
+            <label for="gender">Select Gender</label>
+            <select id="gender" name="gender" required>
+              <option value="">Select gender</option>
+              <option>Male</option>
+              <option>Female</option>
+              <option>Prefer not to say</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="level">Select Year Level</label>
+            <select id="level" name="level" required>
+              <option value="">SELECT YEAR LEVEL</option>
+              <option value="KINDER">KINDER</option>
+              <option value="GRADE 1">GRADE: 1</option>
+              <option value="GRADE 2">GRADE: 2</option>
+              <option value="GRADE 3">GRADE: 3</option>
+              <option value="GRADE 4">GRADE: 4</option>
+              <option value="GRADE 5">GRADE: 5</option>
+              <option value="GRADE 6">GRADE: 6</option>
+              <option value="GRADE 7">GRADE: 7</option>
+              <option value="GRADE 8">GRADE: 8</option>
+              <option value="GRADE 9">GRADE: 9</option>
+              <option value="GRADE 10">GRADE: 10</option>
+              <option value="SHS GRADE 11">SHS GRADE: 11</option>
+              <option value="SHS GRADE 12">SHS GRADE: 12</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Facial Recognition</label>
+            <a href="{{ url_for('auth.facialrecognition') }}" class="face-btn">Capture Face</a>
+          </div>
+
+          <div class="navigation-buttons">
+            <button type="button" onclick="prevPage()" class="backbtn">Back</button>
+            <button type="submit" class="btn">Register</button>
+          </div>
+          <div class="links">
+            <a href="{{ url_for('auth.basiceduclogin') }}">Already have an account? Login</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+ 
+  <script>
+    let currentPage = 1;
+
+    function showPage(pageNumber) {
+      document.querySelectorAll('.form-page').forEach(page => page.classList.remove('active'));
+      document.getElementById('page' + pageNumber).classList.add('active');
+    }
+
+    function nextPage() {
+      currentPage++;
+      showPage(currentPage);
+    }
+
+    function prevPage() {
+      currentPage--;
+      showPage(currentPage);
+    }
+  </script>
+</body>
+</html>

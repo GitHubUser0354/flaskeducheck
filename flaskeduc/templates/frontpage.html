@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Las Es Veristas LMSd{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/frontpage.css') }}">
+    <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <nav>
+        <div class="navbar">
+            <div class="logo"><a href="/">EducCheck</a></div>
+            <div class="nav-links">
+                <ul class="links">
+                    <li>
+                        <a href="/login">Pasig <i class='bx bx-chevron-down'></i></a>
+                        <ul class="dropdown">
+                            <li><a href="{{url_for('auth.basiceduclogin')}}">Basic Education</a></li>
+                            <li><a href="{{url_for('auth.logincollege')}}">College</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/marikina">Marikina <i class='bx bx-chevron-down'></i></a>
+                        <ul class="dropdown">
+                            <li><a href="/marikina/elementary">Basic Education</a></li>
+                            <li><a href="/marikina/junior-high">College</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/makati">Makati <i class='bx bx-chevron-down'></i></a>
+                        <ul class="dropdown">
+                            <li><a href="/makati/elementary">Basic Education</a></li>
+                            <li><a href="/makati/junior-high">College</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/quezon-city">Quezon City <i class='bx bx-chevron-down'></i></a>
+                        <ul class="dropdown">
+                            <li><a href="/quezon-city/elementary">Basic Education</a></li>
+                            <li><a href="/quezon-city/junior-high">College</a></li>
+                    </li>
+                    <li><a href="/faq">FAQ</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <img src="/static/assets/images.jpg" alt="Founder" class="founder-img">
+        <div class="quote-box">
+            <p class="quote">"Learn Dogstyle"</p>
+            <p class="author">— John Paul Mausig</p>
+        </div>
+    </section>
+
+    <script src="{{ url_for('static', filename='js/frontpage.js') }}"></script>
+</body>
+</html>

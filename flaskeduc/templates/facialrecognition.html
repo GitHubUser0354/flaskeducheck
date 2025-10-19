@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facial Recognition Capture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f4f6f8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        video {
+            border: 3px solid #1565c0;
+            border-radius: 10px;
+            width: 480px;
+            height: 360px;
+            object-fit: cover;
+        }
+
+        button {
+            margin-top: 20px;
+            background: #1e88e5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <h2>📸 Capture Your Face</h2>
+    <video id="video" autoplay></video>
+    <button id="capture">Capture Face</button>
+
+    <script>
+        const video = document.getElementById('video');
+        const captureButton = document.getElementById('capture');
+
+        // ✅ Access webcam
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                alert('Unable to access camera: ' + err.message);
+            });
+
+        // ✅ Capture image and send to Flask
+        captureButton.addEventListener('click', () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0);
+
+            const imageData = canvas.toDataURL('image/jpeg');
+
+            fetch('/capture_face', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ image: imageData })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message || 'Face captured successfully!');
+                // Redirect back to registration or dashboard
+                window.location.href = '/register';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error capturing face!');
+            });
+        });
+    </script>
+</body>
+</html>

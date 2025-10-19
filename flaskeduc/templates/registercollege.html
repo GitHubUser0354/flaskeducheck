@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>College Registration Form</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/registercollege.css') }}" />
+</head>
+<body>
+  <header class="page-header">
+    College Registration Form
+  </header>
+
+  <div class="register-container">
+    <div class="form-box">
+      <h2>Student Registration</h2>
+      <p class="subtitle">Please complete the form with accurate details</p>
+
+   
+      <form method="POST" action="/college" enctype="multipart/form-data">
+        <h3 class="section-title">Personal Information</h3>
+         <h3 class="section-title">Facial Recognition</h3>
+        <div class="facial-section">
+          <p style="text-align: center; color: #333; margin-bottom: 10px;">
+            📸 Capture your face for the facial recognition system
+          </p>
+
+          <div class="button-group">
+            <button type="button" class="btn-facial btn-start" id="startCameraBtn">Start Camera</button>
+            <button type="button" class="btn-facial btn-capture" id="captureBtn" disabled>Capture Face</button>
+            <button type="button" class="btn-facial btn-cancel" id="cancelCameraBtn" style="display: none;">Cancel</button>
+          </div>
+
+          <div id="statusMessage" class="status-message"></div>
+
+          <div class="camera-container" id="cameraContainer">
+            <video id="video" autoplay playsinline></video>
+          </div>
+
+          <canvas id="canvas"></canvas>
+          <img id="facePreview" class="face-preview" />
+
+          <input type="hidden" id="faceData" name="face_encoding" value="">
+        </div>
+
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" name="firstname" placeholder="Enter first name" required>
+
+        <label for="middleName">Middle Name</label>
+        <input type="text" id="middleName" name="middlename" placeholder="Enter middle name">
+
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" name="lastname" placeholder="Enter last name" required>
+        <label for="password">password</label>
+        <input type="password" id="password" name="password" placeholder="Enter Password" required>
+
+        <label for="birthDate">Date of Birth</label>
+        <input type="date" id="birthDate" name="datebirth" required>
+
+        <label for="gender">Gender</label>
+        <select id="gender" name="gender" required>
+          <option value="">Select gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Prefer not to say">Prefer not to say</option>
+        </select>
+
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="Enter email address" required>
+
+        <label for="phone">Contact Number</label>
+        <input type="tel" id="phone" name="contactnum" placeholder="09XXXXXXXXX" required>
+
+        <label for="address">Home Address</label>
+        <input type="text" id="address" name="address" placeholder="Enter complete address" required>
+
+        
+        <h3 class="section-title">Academic Details</h3>
+
+        <label for="studentId">Student ID Number</label>
+        <input type="text" id="studentId" name="collegeid" placeholder="Enter ID number" required>
+
+        <label for="course">Course</label>
+        <select id="course" name="courses" required>
+          <option value="">Select course</option>
+          <option value="BS Information Technology">BS Information Technology</option>
+          <option value="BS Computer Science">BS Computer Science</option>
+          <option value="BS Accountancy">BS Accountancy</option>
+          <option value="BS Business Administration">BS Business Administration</option>
+          <option value="BS Hospitality Management">BS Hospitality Management</option>
+          <option value="BS Psychology">BS Psychology</option>
+          <option value="BS Criminology">BS Criminology</option>
+          <option value="BS Education">BS Education</option>
+        </select>
+
+        <label for="yearLevel">Year Level</label>
+        <select id="yearLevel" name="level" required>
+          <option value="">Select year</option>
+          <option value="1st Year">1st Year</option>
+          <option value="2nd Year">2nd Year</option>
+          <option value="3rd Year">3rd Year</option>
+          <option value="4th Year">4th Year</option>
+        </select>
+
+        <label for="lastschool">Last School Attended</label>
+        <input type="text" id="lastschool" name="lastschools" placeholder="Enter last school attended" required>
+
+      
+        <h3 class="section-title">Required Documents</h3>
+
+        <label for="studentPhoto">Upload ID Photo</label>
+        <input type="file" id="studentPhoto" name="idphoto" accept="image/*" required>
+
+        <label for="birthCert">Upload Birth Certificate</label>
+        <input type="file" id="birthCert" name="birthcert" accept=".pdf,.jpg,.png" required>
+
+        <label for="form137">Upload Form 137 / Transcript</label>
+        <input type="file" id="form137" name="form" accept=".pdf,.jpg,.png" required>
+
+        <label for="goodMoral">Upload Certificate of Good Moral</label>
+        <input type="file" id="goodMoral" name="goodmoral" accept=".pdf,.jpg,.png" required>
+
+        <div class="terms">
+          <input type="checkbox" id="terms" required>
+          <label for="terms">I confirm that all information provided is true and correct.</label>
+        </div>
+        <button type="submit">Register</button>
+          <div class="links">
+            <a href="{{ url_for('auth.logincollege') }}">Already have an account? Login</a>
+          </div>
+      </form>
+    </div>
+  </div>
+   <script>
+    let stream = null;
+    let faceCaptured = false;
+
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const facePreview = document.getElementById('facePreview');
+    const cameraContainer = document.getElementById('cameraContainer');
+    const startCameraBtn = document.getElementById('startCameraBtn');
+    const captureBtn = document.getElementById('captureBtn');
+    const cancelCameraBtn = document.getElementById('cancelCameraBtn');
+    const statusMessage = document.getElementById('statusMessage');
+    const faceData = document.getElementById('faceData');
+
+    function showStatus(message, type) {
+      statusMessage.textContent = message;
+      statusMessage.className = `status-message ${type}`;
+      setTimeout(() => {
+        statusMessage.className = 'status-message';
+      }, 3000);
+    }
+
+    startCameraBtn.addEventListener('click', async () => {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ 
+          video: { facingMode: 'user', width: { ideal: 400 } } 
+        });
+        video.srcObject = stream;
+        cameraContainer.style.display = 'block';
+        startCameraBtn.disabled = true;
+        captureBtn.disabled = false;
+        cancelCameraBtn.style.display = 'inline-block';
+        showStatus('Camera started. Please position your face and click Capture Face.', 'info');
+      } catch (err) {
+        showStatus('Camera access denied. Please allow camera access.', 'error');
+      }
+    });
+
+    captureBtn.addEventListener('click', () => {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0);
+
+      // Show preview
+      facePreview.src = canvas.toDataURL('image/jpeg');
+      facePreview.style.display = 'block';
+
+      // Send to server for face encoding
+      canvas.toBlob(blob => {
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          try {
+            const response = await fetch('{{ url_for("auth.capture_face") }}', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ image: reader.result })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+              faceCaptured = true;
+              faceData.value = 'captured';
+              showStatus('✅ Face captured successfully!', 'success');
+              stopCamera();
+            } else {
+              showStatus('❌ ' + data.message, 'error');
+            }
+          } catch (err) {
+            showStatus('Error processing face: ' + err.message, 'error');
+          }
+        };
+        reader.readAsDataURL(blob);
+      }, 'image/jpeg');
+    });
+
+    cancelCameraBtn.addEventListener('click', stopCamera);
+
+    function stopCamera() {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+      cameraContainer.style.display = 'none';
+      startCameraBtn.disabled = false;
+      captureBtn.disabled = true;
+      cancelCameraBtn.style.display = 'none';
+    }
+
+    // Optional: Validate face capture before form submission
+    document.getElementById('registrationForm').addEventListener('submit', (e) => {
+      if (!faceCaptured) {
+        showStatus('⚠️ Please capture your face before registering.', 'error');
+        e.preventDefault();
+        startCameraBtn.focus();
+      }
+    });
+  </script>
+</body>
+</html>

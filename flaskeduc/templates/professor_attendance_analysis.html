@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance Analysis - Professor Dashboard</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .header h1 {
+      color: #333;
+      font-size: 28px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background-color: #667eea;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #5568d3;
+      transform: translateY(-2px);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-card.present {
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    }
+
+    .stat-card.absent {
+      background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+    }
+
+    .stat-card.records {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .stat-number {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      opacity: 0.9;
+      text-transform: uppercase;
+    }
+
+    .chart-section {
+      background: white;
+      border-radius: 10px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .chart-title {
+      color: #333;
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #667eea;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 400px;
+      margin-bottom: 20px;
+    }
+
+    .classes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+    }
+
+    .class-card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-top: 4px solid #667eea;
+    }
+
+    .class-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .class-code {
+      background: #667eea;
+      color: white;
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 3px;
+      font-weight: bold;
+      font-size: 11px;
+      margin-bottom: 8px;
+    }
+
+    .class-name {
+      color: #333;
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .class-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .class-stat {
+      background: #f8f9fa;
+      padding: 12px;
+      border-radius: 5px;
+      text-align: center;
+      border-left: 3px solid #667eea;
+    }
+
+    .class-stat-label {
+      color: #666;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .class-stat-value {
+      color: #333;
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+
+    .class-stat.present {
+      border-left-color: #38ef7d;
+    }
+
+    .class-stat.absent {
+      border-left-color: #f45c43;
+    }
+
+    .class-stat.rate {
+      border-left-color: #667eea;
+    }
+
+    .class-rate-bar {
+      width: 100%;
+      height: 8px;
+      background: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .class-rate-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #38ef7d, #11998e);
+      width: 0%;
+    }
+
+    .class-action {
+      background-color: #667eea;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 12px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .class-action:hover {
+      background-color: #5568d3;
+      transform: translateY(-2px);
+    }
+
+    .no-classes {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+    }
+
+    @media (max-width: 768px) {
+      .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .chart-container {
+        height: 300px;
+      }
+
+      .classes-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-top">
+        <h1>📊 Attendance Analysis</h1>
+        <div class="nav-buttons">
+          <a href="{{ url_for('auth.professor_dashboard') }}" class="btn">⬅️ Back to Dashboard</a>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card present">
+          <div class="stat-number">{{ total_present }}</div>
+          <div class="stat-label">Total Present</div>
+        </div>
+        <div class="stat-card absent">
+          <div class="stat-number">{{ total_absent }}</div>
+          <div class="stat-label">Total Absent</div>
+        </div>
+        <div class="stat-card records">
+          <div class="stat-number">{{ total_records }}</div>
+          <div class="stat-label">Total Records</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">{{ "%.1f"|format(overall_rate) }}%</div>
+          <div class="stat-label">Overall Rate</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-section">
+      <div class="chart-title">📈 Overall Attendance Distribution</div>
+      <div class="chart-container">
+        <canvas id="overallChart"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-section">
+      <div class="chart-title">📚 Attendance Rate by Class</div>
+      <div class="chart-container">
+        <canvas id="classComparisonChart"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-section">
+      <div class="chart-title">👥 Classes Overview</div>
+      <div class="classes-grid">
+        {% if subject_stats %}
+          {% for stat in subject_stats %}
+            <div class="class-card">
+              <div class="class-code">{{ stat.subject.code }}</div>
+              <div class="class-name">{{ stat.subject.name }}</div>
+
+              <div class="class-stats">
+                <div class="class-stat present">
+                  <div class="class-stat-label">Present</div>
+                  <div class="class-stat-value">{{ stat.present }}</div>
+                </div>
+                <div class="class-stat absent">
+                  <div class="class-stat-label">Absent</div>
+                  <div class="class-stat-value">{{ stat.absent }}</div>
+                </div>
+                <div class="class-stat rate" style="grid-column: 1 / -1;">
+                  <div class="class-stat-label">Students: {{ stat.total_students }}</div>
+                  <div class="class-stat-value">{{ "%.1f"|format(stat.attendance_rate) }}% Attendance</div>
+                  <div class="class-rate-bar">
+                    <div class="class-rate-fill" style="width: {{ stat.attendance_rate }}%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <a href="{{ url_for('auth.professor_class_attendance', subject_id=stat.subject.id) }}" class="class-action">
+                📋 Detailed View
+              </a>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="no-classes" style="grid-column: 1 / -1;">
+            <p>📭 No classes assigned yet</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Parse subject stats from template
+    const subjectStats = {{ subject_stats|tojson }};
+    const totalPresent = {{ total_present }};
+    const totalAbsent = {{ total_absent }};
+
+    const colors = {
+      present: '#38ef7d',
+      absent: '#f45c43',
+      blue: '#667eea',
+      purple: '#764ba2'
+    };
+
+    // 1. Overall Distribution Pie Chart
+    const overallCtx = document.getElementById('overallChart').getContext('2d');
+    new Chart(overallCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Present', 'Absent'],
+        datasets: [{
+          data: [totalPresent, totalAbsent],
+          backgroundColor: [colors.present, colors.absent],
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+
+    // 2. Class Comparison Bar Chart
+    const classLabels = subjectStats.map(s => s.subject.code);
+    const classRates = subjectStats.map(s => parseFloat(s.attendance_rate.toFixed(1)));
+    const classPresent = subjectStats.map(s => s.present);
+    const classAbsent = subjectStats.map(s => s.absent);
+
+    const comparisonCtx = document.getElementById('classComparisonChart').getContext('2d');
+    new Chart(comparisonCtx, {
+      type: 'bar',
+      data: {
+        labels: classLabels,
+        datasets: [
+          {
+            label: 'Present',
+            data: classPresent,
+            backgroundColor: colors.present,
+            borderRadius: 5
+          },
+          {
+            label: 'Absent',
+            data: classAbsent,
+            backgroundColor: colors.absent,
+            borderRadius: 5
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class Attendance - {{ subject.name }}</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .header h1 {
+      color: #333;
+      font-size: 28px;
+    }
+
+    .subject-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .info-box {
+      background: #f8f9fa;
+      padding: 12px;
+      border-radius: 5px;
+      border-left: 3px solid #667eea;
+    }
+
+    .info-label {
+      color: #666;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .info-value {
+      color: #333;
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 5px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background-color: #667eea;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #5568d3;
+    }
+
+    .chart-section {
+      background: white;
+      border-radius: 10px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .chart-title {
+      color: #333;
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #667eea;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 400px;
+    }
+
+    .table-section {
+      background: white;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .table-title {
+      color: #333;
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #667eea;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table thead {
+      background: #f8f9fa;
+    }
+
+    table th {
+      padding: 12px;
+      text-align: left;
+      color: #333;
+      font-weight: bold;
+      border-bottom: 2px solid #667eea;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    table td {
+      padding: 12px;
+      border-bottom: 1px solid #e0e0e0;
+      color: #555;
+      font-size: 13px;
+    }
+
+    table tbody tr:hover {
+      background: #f8f9fa;
+    }
+
+    .student-id {
+      font-weight: bold;
+      color: #667eea;
+    }
+
+    .attendance-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      text-align: center;
+      width: 80px;
+    }
+
+    .attendance-present {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .attendance-absent {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .percentage-bar {
+      width: 100%;
+      max-width: 150px;
+      height: 8px;
+      background: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .percentage-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #38ef7d, #11998e);
+      width: 0%;
+    }
+
+    .percentage-good {
+      background: linear-gradient(90deg, #38ef7d, #11998e);
+    }
+
+    .percentage-warning {
+      background: linear-gradient(90deg, #ffc107, #ff9800);
+    }
+
+    .percentage-danger {
+      background: linear-gradient(90deg, #f45c43, #eb3349);
+    }
+
+    .filter-section {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 15px;
+      border: 2px solid #667eea;
+      background: white;
+      color: #667eea;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn.active {
+      background: #667eea;
+      color: white;
+    }
+
+    .filter-btn:hover {
+      background: #667eea;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .chart-container {
+        height: 300px;
+      }
+
+      table {
+        font-size: 12px;
+      }
+
+      table th, table td {
+        padding: 8px;
+      }
+
+      .percentage-bar {
+        max-width: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-top">
+        <h1>📊 {{ subject.name }} Attendance</h1>
+        <div class="nav-buttons">
+          <a href="{{ url_for('auth.professor_attendance_analysis') }}" class="btn">⬅️ Back</a>
+        </div>
+      </div>
+
+      <div class="subject-info">
+        <div class="info-box">
+          <div class="info-label">Subject Code</div>
+          <div class="info-value">{{ subject.code }}</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Course/Level</div>
+          <div class="info-value">{{ subject.course }} - {{ subject.level }}</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Total Students</div>
+          <div class="info-value">{{ student_attendance|length }}</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Units</div>
+          <div class="info-value">{{ subject.units }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-section">
+      <div class="chart-title">📈 Monthly Attendance Trend</div>
+      <div class="chart-container">
+        <canvas id="monthlyChart"></canvas>
+      </div>
+    </div>
+
+    <div class="table-section">
+      <div class="table-title">👥 Student Attendance Details</div>
+
+      <div class="filter-section">
+        <button class="filter-btn active" data-filter="all">All Students</button>
+        <button class="filter-btn" data-filter="high">High Attendance (75%+)</button>
+        <button class="filter-btn" data-filter="medium">Medium Attendance (50-75%)</button>
+        <button class="filter-btn" data-filter="low">Low Attendance (<50%)</button>
+      </div>
+
+      <div class="table-responsive">
+        <table id="attendanceTable">
+          <thead>
+            <tr>
+              <th>Student ID</th>
+              <th>Name</th>
+              <th>Total Days</th>
+              <th>Present</th>
+              <th>Absent</th>
+              <th>Attendance %</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for student_data in student_attendance %}
+              <tr class="student-row" data-percentage="{{ student_data.percentage }}">
+                <td class="student-id">{{ student_data.student.collegeid }}</td>
+                <td>{{ student_data.student.firstname }} {{ student_data.student.lastname }}</td>
+                <td>{{ student_data.total }}</td>
+                <td style="color: #38ef7d; font-weight: bold;">{{ student_data.present }}</td>
+                <td style="color: #f45c43; font-weight: bold;">{{ student_data.absent }}</td>
+                <td>
+                  <div class="percentage-bar">
+                    <div class="percentage-fill {% if student_data.percentage >= 75 %}percentage-good{% elif student_data.percentage >= 50 %}percentage-warning{% else %}percentage-danger{% endif %}" 
+                         style="width: {{ student_data.percentage }}%;"></div>
+                  </div>
+                  <div style="margin-top: 5px; font-weight: bold;">{{ "%.1f"|format(student_data.percentage) }}%</div>
+                </td>
+                <td>
+                  <span class="attendance-badge {% if student_data.percentage >= 75 %}attendance-present{% else %}attendance-absent{% endif %}">
+                    {% if student_data.percentage >= 75 %}
+                      ✓ Good
+                    {% else %}
+                      ✗ Low
+                    {% endif %}
+                  </span>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Parse monthly data
+    const monthlyData = JSON.parse('{{ monthly_data|safe }}');
+
+    const colors = {
+      present: '#38ef7d',
+      absent: '#f45c43'
+    };
+
+    // Monthly Chart
+    const monthLabels = Object.keys(monthlyData);
+    const monthPresent = monthLabels.map(month => monthlyData[month].present);
+    const monthAbsent = monthLabels.map(month => monthlyData[month].absent);
+
+    const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+    new Chart(monthlyCtx, {
+      type: 'line',
+      data: {
+        labels: monthLabels,
+        datasets: [
+          {
+            label: 'Present',
+            data: monthPresent,
+            borderColor: colors.present,
+            backgroundColor: colors.present + '20',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.4,
+            pointRadius: 5,
+            pointBackgroundColor: colors.present
+          },
+          {
+            label: 'Absent',
+            data: monthAbsent,
+            borderColor: colors.absent,
+            backgroundColor: colors.absent + '20',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.4,
+            pointRadius: 5,
+            pointBackgroundColor: colors.absent
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    // Filter functionality
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const studentRows = document.querySelectorAll('.student-row');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.dataset.filter;
+
+        studentRows.forEach(row => {
+          const percentage = parseFloat(row.dataset.percentage);
+          let show = false;
+
+          if (filter === 'all') {
+            show = true;
+          } else if (filter === 'high' && percentage >= 75) {
+            show = true;
+          } else if (filter === 'medium' && percentage >= 50 && percentage < 75) {
+            show = true;
+          } else if (filter === 'low' && percentage < 50) {
+            show = true;
+          }
+
+          row.style.display = show ? '' : 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

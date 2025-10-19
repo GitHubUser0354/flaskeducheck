@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>College Student Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/logincollege.css') }}">
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-header">
+      <h1>Facial Recognition Attendance System</h1>
+      <p>Login to your account</p>
+    </div>
+
+    <div class="tab-container">
+      <button class="tab-button active" onclick="switchTab('student')">
+        <span class="icon"></span> Student Login
+      </button>
+      <button class="tab-button" onclick="switchTab('professor')">
+        <span class="icon"></span> Professor Login
+      </button>
+    </div>
+
+    <!-- Student Login Tab -->
+    <div id="student" class="tab-content active">
+      <div class="login-body">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-container">
+              {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('auth.logincollege') }}">
+          <div class="form-group">
+            <label for="student-id">Student ID</label>
+            <input type="number" id="student-id" name="collegeid" placeholder="Enter your Student ID" required>
+          </div>
+
+          <div class="form-group">
+            <label for="student-password">Password</label>
+            <input type="password" id="student-password" name="password" placeholder="Enter your password" required>
+          </div>
+
+          <button type="submit" class="submit-btn">Login</button>
+        </form>
+
+        <div class="login-footer">
+          <p>Don't have an account?</p>
+          <a href="{{ url_for('auth.college_register') }}">Register as Student</a>
+          <div style="margin-top: 15px;">
+            <a href="{{ url_for('auth.home') }}" class="back-link">Back to Home</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Professor Login Tab -->
+    <div id="professor" class="tab-content">
+      <div class="login-body">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-container">
+              {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('auth.professor_login') }}">
+          <div class="form-group">
+            <label for="professor-id">Professor ID</label>
+            <input type="number" id="professor-id" name="professorid" placeholder="Enter your Professor ID" required>
+          </div>
+
+          <div class="form-group">
+            <label for="professor-password">Password</label>
+            <input type="password" id="professor-password" name="password" placeholder="Enter your password" required>
+          </div>
+
+          <button type="submit" class="submit-btn">Login</button>
+        </form>
+
+        <div class="login-footer">
+          <p>Don't have an account?</p>
+          <a href="{{ url_for('auth.professor_register') }}">Register as Professor</a>
+          <div style="margin-top: 15px;">
+            <a href="{{ url_for('auth.home') }}" class="back-link">Back to Home</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tabName) {
+      // Hide all tab contents
+      const contents = document.querySelectorAll('.tab-content');
+      contents.forEach(content => {
+        content.classList.remove('active');
+      });
+
+      // Remove active class from all buttons
+      const buttons = document.querySelectorAll('.tab-button');
+      buttons.forEach(button => {
+        button.classList.remove('active');
+      });
+
+      // Show selected tab
+      document.getElementById(tabName).classList.add('active');
+
+      // Add active class to clicked button
+      event.target.closest('.tab-button').classList.add('active');
+    }
+  </script>
+</html>

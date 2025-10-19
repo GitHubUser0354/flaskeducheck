@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grades & Pass Output - {{ college.firstname }} {{ college.lastname }}</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .grades-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .header h1 {
+      color: #333;
+      font-size: 28px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nav-buttons a {
+      padding: 10px 20px;
+      background-color: #667eea;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .nav-buttons a:hover {
+      background-color: #5568d3;
+      transform: translateY(-2px);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-card.passed {
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    }
+
+    .stat-card.failed {
+      background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+    }
+
+    .stat-card.pending {
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+
+    .stat-card.average {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .stat-number {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      opacity: 0.9;
+      text-transform: uppercase;
+    }
+
+    .info-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .info-box {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+
+    .info-box label {
+      display: block;
+      color: #666;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .info-box p {
+      color: #333;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .grades-section {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-header {
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #667eea;
+    }
+
+    .section-header h2 {
+      color: #333;
+      font-size: 24px;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table thead {
+      background: #f8f9fa;
+    }
+
+    table th {
+      padding: 15px;
+      text-align: left;
+      color: #333;
+      font-weight: bold;
+      border-bottom: 2px solid #667eea;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    table td {
+      padding: 15px;
+      border-bottom: 1px solid #e0e0e0;
+      color: #555;
+    }
+
+    table tbody tr:hover {
+      background: #f8f9fa;
+    }
+
+    .code {
+      font-weight: bold;
+      color: #667eea;
+    }
+
+    .grade-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .grade-a {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .grade-b {
+      background: #cfe2ff;
+      color: #084298;
+    }
+
+    .grade-c {
+      background: #fff3cd;
+      color: #664d03;
+    }
+
+    .grade-d {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .grade-f {
+      background: #f8d7da;
+      color: #721c24;
+      font-weight: bold;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .status-passed {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-failed {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .status-pending {
+      background: #e2e3e5;
+      color: #383d41;
+    }
+
+    .grade-input {
+      width: 80px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .no-grades {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+    }
+
+    .no-grades p {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .no-grades small {
+      display: block;
+      color: #bbb;
+      margin-top: 10px;
+    }
+
+    .legend {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .legend-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .legend-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .legend-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 3px;
+    }
+
+    .flash-container {
+      margin-bottom: 20px;
+    }
+
+    .flash {
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .flash.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .flash.info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+
+    .download-btn {
+      background-color: #28a745;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .download-btn:hover {
+      background-color: #218838;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .table-responsive {
+        font-size: 12px;
+      }
+
+      table th, table td {
+        padding: 8px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .legend-items {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="grades-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-container">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="header">
+      <div class="header-top">
+        <h1>📊 Grades & Pass Output</h1>
+        <div class="nav-buttons">
+          <a href="{{ url_for('auth.college_dashboard') }}">⬅️ Back to Dashboard</a>
+          <a href="{{ url_for('auth.college_subjects') }}">📚 My Subjects</a>
+        </div>
+      </div>
+
+      <div class="info-section">
+        <div class="info-box">
+          <label>Name</label>
+          <p>{{ college.firstname }} {{ college.lastname }}</p>
+        </div>
+        <div class="info-box">
+          <label>Student ID</label>
+          <p>{{ college.collegeid }}</p>
+        </div>
+        <div class="info-box">
+          <label>Course</label>
+          <p>{{ college.courses }}</p>
+        </div>
+        <div class="info-box">
+          <label>Year Level</label>
+          <p>{{ college.level }}</p>
+        </div>
+      </div>
+
+      <div class="stats-grid" style="margin-top: 20px;">
+        <div class="stat-card passed">
+          <div class="stat-number">{{ passed }}</div>
+          <div class="stat-label">Subjects Passed</div>
+        </div>
+        <div class="stat-card failed">
+          <div class="stat-number">{{ failed }}</div>
+          <div class="stat-label">Subjects Failed</div>
+        </div>
+        <div class="stat-card pending">
+          <div class="stat-number">{{ pending }}</div>
+          <div class="stat-label">Pending Grades</div>
+        </div>
+        <div class="stat-card average">
+          <div class="stat-number">{{ "%.2f"|format(average_grade) }}</div>
+          <div class="stat-label">Average Grade</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grades-section">
+      <div class="section-header">
+        <h2>📋 Detailed Grades</h2>
+      </div>
+
+      {% if grades %}
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Subject Code</th>
+                <th>Subject Name</th>
+                <th>Units</th>
+                <th>Midterm</th>
+                <th>Final Exam</th>
+                <th>Assignment</th>
+                <th>Participation</th>
+                <th>Final Grade</th>
+                <th>Letter Grade</th>
+                <th>Status</th>
+                <th>Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for grade in grades %}
+                <tr>
+                  <td class="code">{{ grade.subject.code }}</td>
+                  <td>{{ grade.subject.name }}</td>
+                  <td>{{ grade.subject.units }}</td>
+                  <td>{{ grade.midterm if grade.midterm else '-' }}</td>
+                  <td>{{ grade.final if grade.final else '-' }}</td>
+                  <td>{{ grade.assignment if grade.assignment else '-' }}</td>
+                  <td>{{ grade.participation if grade.participation else '-' }}</td>
+                  <td><strong>{{ grade.final_grade if grade.final_grade else '-' }}</strong></td>
+                  <td>
+                    <span class="grade-badge grade-{{ grade.get_letter_grade()|lower }}">
+                      {{ grade.get_letter_grade() }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="status-badge status-{{ grade.pass_status|lower }}">
+                      {{ grade.pass_status }}
+                    </span>
+                  </td>
+                  <td>{{ grade.remarks if grade.remarks else '-' }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="legend">
+          <div class="legend-title">📌 Grading Scale:</div>
+          <div class="legend-items">
+            <div class="legend-item">
+              <div class="legend-color grade-a"></div>
+              <span><strong>A (90-100)</strong> - Excellent</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color grade-b"></div>
+              <span><strong>B+ (85-89)</strong> - Very Good</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color grade-b"></div>
+              <span><strong>B (80-84)</strong> - Good</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color grade-c"></div>
+              <span><strong>C+ (75-79)</strong> - Satisfactory</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color grade-c"></div>
+              <span><strong>C (70-74)</strong> - Passing</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color grade-d"></div>
+              <span><strong>D (65-69)</strong> - Conditional</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color grade-f"></div>
+              <span><strong>F (Below 65)</strong> - Failed</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="download-btn" onclick="window.print()">📥 Download/Print Report</button>
+
+      {% else %}
+        <div class="no-grades">
+          <p>📭 No grades available yet</p>
+          <small>Your grades will appear here once they are posted by your instructors.</small>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

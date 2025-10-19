@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grade Students - {{ subject.name }}</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .header h1 {
+      color: #333;
+      font-size: 24px;
+    }
+
+    .subject-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .info-box {
+      background: #f8f9fa;
+      padding: 12px;
+      border-radius: 5px;
+      border-left: 3px solid #667eea;
+    }
+
+    .info-label {
+      color: #666;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .info-value {
+      color: #333;
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 5px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background-color: #667eea;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #5568d3;
+    }
+
+    .grading-section {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-title {
+      color: #333;
+      font-size: 20px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #667eea;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table thead {
+      background: #f8f9fa;
+    }
+
+    table th {
+      padding: 15px;
+      text-align: left;
+      color: #333;
+      font-weight: bold;
+      border-bottom: 2px solid #667eea;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    table td {
+      padding: 15px;
+      border-bottom: 1px solid #e0e0e0;
+      color: #555;
+    }
+
+    table tbody tr:hover {
+      background: #f8f9fa;
+    }
+
+    .student-id {
+      font-weight: bold;
+      color: #667eea;
+    }
+
+    .student-name {
+      color: #333;
+      font-weight: 500;
+    }
+
+    .grade-input {
+      width: 70px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .grade-input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+    }
+
+    .grade-display {
+      font-weight: bold;
+      color: #667eea;
+      text-align: center;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 3px;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .status-passed {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-failed {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .status-pending {
+      background: #e2e3e5;
+      color: #383d41;
+    }
+
+    .save-btn {
+      background-color: #28a745;
+      padding: 10px 20px;
+      font-size: 13px;
+      margin-right: 5px;
+    }
+
+    .save-btn:hover {
+      background-color: #218838;
+    }
+
+    .reset-btn {
+      background-color: #6c757d;
+      padding: 10px 20px;
+      font-size: 13px;
+    }
+
+    .reset-btn:hover {
+      background-color: #5a6268;
+    }
+
+    .notes {
+      background: #e7f3ff;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 20px;
+      font-size: 13px;
+      color: #004085;
+      border-left: 4px solid #004085;
+    }
+
+    .no-students {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+    }
+
+    .flash-container {
+      margin-bottom: 20px;
+    }
+
+    .flash {
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .flash.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .flash.danger {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    @media (max-width: 768px) {
+      .table-responsive {
+        font-size: 12px;
+      }
+
+      table th, table td {
+        padding: 8px;
+      }
+
+      .grade-input {
+        width: 50px;
+      }
+
+      .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-container">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="header">
+      <div class="header-top">
+        <h1>📊 Grade Students</h1>
+        <div class="nav-buttons">
+          <a href="{{ url_for('auth.professor_classes') }}" class="btn">⬅️ Back to Classes</a>
+        </div>
+      </div>
+
+      <div class="subject-info">
+        <div class="info-box">
+          <div class="info-label">Subject Code</div>
+          <div class="info-value">{{ subject.code }}</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Subject Name</div>
+          <div class="info-value">{{ subject.name }}</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Course/Level</div>
+          <div class="info-value">{{ subject.course }} - {{ subject.level }}</div>
+        </div>
+        <div class="info-box">
+          <div class="info-label">Units</div>
+          <div class="info-value">{{ subject.units }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grading-section">
+      <h2 class="section-title">👥 Student Grades</h2>
+
+      {% if students %}
+        <div class="table-responsive">
+          <form id="gradingForm">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student ID</th>
+                  <th>Name</th>
+                  <th>Midterm <br>(25%)</th>
+                  <th>Final Exam <br>(40%)</th>
+                  <th>Assignment <br>(20%)</th>
+                  <th>Participation <br>(15%)</th>
+                  <th>Final Grade</th>
+                  <th>Letter</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for student in students %}
+                  {% set grade = grades[student.id] %}
+                  <tr>
+                    <td class="student-id">{{ student.collegeid }}</td>
+                    <td class="student-name">{{ student.firstname }} {{ student.lastname }}</td>
+                    <td>
+                      <input type="number" class="grade-input midterm" data-grade-id="{{ grade.id }}" 
+                             value="{{ grade.midterm if grade.midterm else '' }}" min="0" max="100" step="0.5">
+                    </td>
+                    <td>
+                      <input type="number" class="grade-input final" data-grade-id="{{ grade.id }}" 
+                             value="{{ grade.final if grade.final else '' }}" min="0" max="100" step="0.5">
+                    </td>
+                    <td>
+                      <input type="number" class="grade-input assignment" data-grade-id="{{ grade.id }}" 
+                             value="{{ grade.assignment if grade.assignment else '' }}" min="0" max="100" step="0.5">
+                    </td>
+                    <td>
+                      <input type="number" class="grade-input participation" data-grade-id="{{ grade.id }}" 
+                             value="{{ grade.participation if grade.participation else '' }}" min="0" max="100" step="0.5">
+                    </td>
+                    <td class="grade-display final-grade-{{ grade.id }}">
+                      {{ grade.final_grade if grade.final_grade else '-' }}
+                    </td>
+                    <td class="grade-display letter-grade-{{ grade.id }}">
+                      {{ grade.get_letter_grade() if grade.final_grade else '-' }}
+                    </td>
+                    <td>
+                      <span class="status-badge status-{{ grade.pass_status|lower if grade.pass_status else 'pending' }}">
+                        {{ grade.pass_status if grade.pass_status else 'Pending' }}
+                      </span>
+                    </td>
+                    <td>
+                      <button type="button" class="btn save-btn save-grade-btn" data-grade-id="{{ grade.id }}">
+                        💾 Save
+                      </button>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </form>
+        </div>
+
+        <div class="notes">
+          <strong>📌 Grading Information:</strong><br>
+          • Midterm: 25% | Final Exam: 40% | Assignment: 20% | Participation: 15%<br>
+          • Passing grade: 70 and above<br>
+          • Click Save to update individual student grades
+        </div>
+      {% else %}
+        <div class="no-students">
+          <p>📭 No students found for this class</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.save-grade-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const gradeId = btn.dataset.gradeId;
+        const row = btn.closest('tr');
+        
+        const midterm = row.querySelector('.midterm').value;
+        const finalExam = row.querySelector('.final').value;
+        const assignment = row.querySelector('.assignment').value;
+        const participation = row.querySelector('.participation').value;
+
+        const formData = new FormData();
+        formData.append('midterm', midterm || '');
+        formData.append('final', finalExam || '');
+        formData.append('assignment', assignment || '');
+        formData.append('participation', participation || '');
+
+        try {
+          const response = await fetch(`{{ url_for('auth.update_grade', grade_id='ID') }}`.replace('ID', gradeId), {
+            method: 'POST',
+            body: formData
+          });
+
+          const data = await response.json();
+          if (data.success) {
+            row.querySelector(`.final-grade-${gradeId}`).textContent = data.final_grade || '-';
+            row.querySelector(`.letter-grade-${gradeId}`).textContent = data.letter_grade || '-';
+            row.querySelector('.status-badge').textContent = data.pass_status;
+            row.querySelector('.status-badge').className = `status-badge status-${data.pass_status.toLowerCase()}`;
+            
+            alert('✅ Grade saved successfully!');
+          } else {
+            alert('❌ Error: ' + data.message);
+          }
+        } catch (error) {
+          alert('❌ Error saving grade: ' + error.message);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

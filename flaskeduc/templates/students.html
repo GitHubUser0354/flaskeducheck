@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EducCheck</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .header {
+            background-color: #006400; /* Dark green */
+            color: white;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+        .user-menu span {
+            margin-right: 10px;
+        }
+        .main-container {
+            display: flex;
+            margin: 20px;
+        }
+        .sidebar {
+            width: 200px;
+            background-color: #fff;
+            border-right: 1px solid #ddd;
+            padding: 10px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #000;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+            background-color: #fff;
+        }
+        .options-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .calendar {
+            margin-bottom: 20px;
+        }
+        .calendar table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .calendar th, .calendar td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .calendar th {
+            background-color: #f2f2f2;
+        }
+        .highlighted {
+            background-color: #ffff99;
+        }
+        .welcome-box {
+            background-color: #e6ffe6;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .announcements {
+            margin-bottom: 20px;
+        }
+        .arrow {
+            position: absolute;
+            top: 100px;
+            right: 200px;
+            font-size: 20px;
+            color: green;
+        }
+        .click-sites {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">EducCheck</div>
+        <div class="nav-links">
+            <span>Home</span> ≡ <span>OVERVIEW</span>
+            <span>Module 1 Blended Use</span>
+            <span>TCP4111 SY1718</span>
+        </div>
+        <div class="user-menu">
+            <span>Sales</span>
+            <span>Jasper Vincent</span>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <nav class="sidebar">
+            <ul>
+                <li><a href="#">Overview</a></li>
+                <li>OPTIONS</li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Membership</a></li>
+                <li><a href="#">Calendar</a></li>
+                <li><a href="#">Resources</a></li>
+                <li><a href="#">Announcements</a></li>
+                <li><a href="#">Worksite Setup</a></li>
+                <li><a href="#">Preferences</a></li>
+                <li><a href="#">Account</a></li>
+            </ul>
+        </nav>
+
+        <section class="content">
+            <div class="options-bar">
+                <span>MESSAGE OF THE DAY</span>
+                <span>Calendar</span>
+                <div class="click-sites">
+                    <span>OPTIONS</span>
+                    <span>PUBLISH</span>
+                    <span>PRIVATE</span>
+                    <span>LINK</span>
+                    <span>HELP</span>
+                    <div class="arrow">↑ Click Sites</div>
+                </div>
+            </div>
+
+            <h3>SAKAI Help Page</h3>
+            <p>(Sakai Administrator - Apr 21, 2017 10:07 am)</p>
+
+            <div class="calendar">
+                <h4>April 2019</h4>
+                <select>
+                    <option>Today</option>
+                </select>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sun</th>
+                            <th>Mon</th>
+                            <th>Tue</th>
+                            <th>Wed</th>
+                            <th>Thu</th>
+                            <th>Fri</th>
+                            <th>Sat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>31</td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                            <td>5</td>
+                            <td>6</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>8</td>
+                            <td>9</td>
+                            <td>10</td>
+                            <td class="highlighted">11</td>
+                            <td>12</td>
+                            <td>13</td>
+                        </tr>
+                        <tr>
+                            <td>14</td>
+                            <td>15</td>
+                            <td>16</td>
+                            <td>17</td>
+                            <td>18</td>
+                            <td>19</td>
+                            <td>20</td>
+                        </tr>
+                        <tr>
+                            <td>21</td>
+                            <td>22</td>
+                            <td>23</td>
+                            <td>24</td>
+                            <td>25</td>
+                            <td>26</td>
+                            <td>27</td>
+                        </tr>
+                        <tr>
+                            <td>28</td>
+                            <td>29</td>
+                            <td>30</td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>HOME INFORMATION DISPLAY</h3>
+
+            <div class="welcome-box">
+                <h4>Welcome to your personal workspace.</h4>
+                <p>In Sakai each user has his or her own individual worksite called Home. My Workspace is a place where you can keep personal documents, create new sites, maintain a schedule, store resources, and much more.</p>
+            </div>
+
+            <p>The default information displayed here for a new user can be modified by the Sakai Administrator by editing the sakai properties configuration value "myworkspace.info.url" to point to the html file desired.</p>
+
+            <h4>RECENT ANNOUNCEMENTS</h4>
+            <p>Announcements from the last 10 days)</p>
+            <select>
+                <option>View All</option>
+            </select>
+
+            <div class="chat-icon">Chat 1</div>
+        </section>
+    </div>
+</body>
+</html>

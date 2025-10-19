@@ -1,0 +1,193 @@
+ body {
+     font-family: 'Poppins', sans-serif;
+     background: linear-gradient(135deg, #0b132b, #1c2541, #3a506b);
+     color: #fff;
+     margin: 0;
+     height: 100vh;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+ }
+
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+.nextbtn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    cursor: pointer;/
+}
+.nextbtn :hover {
+    background-color: #0056b3;
+    /* Darker blue on hover */
+}
+
+.nextbtn:active {
+    background-color: #004085;
+    /* Even darker blue when clicked */
+    transform: translateY(1px);
+    /* Slight downward shift on click */
+}
+
+.backbtn {
+    background-color: #007bff;
+    /* Blue background */
+    color: white;
+    /* White text */
+    padding: 10px 20px;
+    /* Spacing inside the button */
+    border: none;
+    /* No border */
+    border-radius: 5px;
+    /* Slightly rounded corners */
+    font-family: Arial, sans-serif;
+    /* Font style */
+    font-size: 16px;
+    /* Font size */
+    cursor: pointer;
+    /* Changes cursor to a pointer on hover */
+}
+
+.backbtn :hover {
+    background-color: #0056b3;
+    /* Darker blue on hover */
+}
+
+.backbtn:active {
+    background-color: #004085;
+    /* Even darker blue when clicked */
+    transform: translateY(1px);
+    /* Slight downward shift on click */
+}
+
+input:focus,
+select:focus {
+    border-color: #2575fc;
+    box-shadow: 0 0 5px rgba(37, 117, 252, 0.3);
+    outline: none;
+}
+
+ .register-container {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     width: 100%;
+ }
+
+ .register-card {
+     background-color: rgba(255, 255, 255, 0.1);
+     padding: 40px;
+     border-radius: 15px;
+     width: 350px;
+     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+     backdrop-filter: blur(10px);
+     animation: fadeIn 1s ease-in-out;
+ }
+
+ .register-card h2 {
+     text-align: center;
+     margin-bottom: 20px;
+     color: #00d4ff;
+ }
+
+ .input-group {
+     margin-bottom: 15px;
+     display: flex;
+     flex-direction: column;
+ }
+
+ .input-group label {
+     font-size: 14px;
+     margin-bottom: 5px;
+ }
+
+ .input-group input {
+     padding: 10px;
+     border: none;
+     border-radius: 8px;
+     outline: none;
+     background: rgba(255, 255, 255, 0.2);
+     color: #fff;
+     font-size: 14px;
+     transition: 0.3s;
+ }
+
+ .input-group input::placeholder {
+     color: rgba(255, 255, 255, 0.7);
+ }
+
+ .input-group input:focus {
+     background: rgba(255, 255, 255, 0.3);
+     box-shadow: 0 0 5px #00d4ff;
+ }
+
+ .btn {
+     width: 100%;
+     padding: 10px;
+     background-color: #00d4ff;
+     border: none;
+     border-radius: 8px;
+     font-size: 16px;
+     color: #000;
+     font-weight: 600;
+     cursor: pointer;
+     transition: background 0.3s;
+ }
+
+ .btn:hover {
+     background-color: #00aaff;
+ }
+
+ .links {
+     text-align: center;
+     margin-top: 15px;
+ }
+
+ .links a {
+     color: #00d4ff;
+     text-decoration: none;
+     font-size: 14px;
+ }
+
+ .links a:hover {
+     text-decoration: underline;
+ }
+
+ @keyframes fadeIn {
+     from {
+         opacity: 0;
+         transform: translateY(-20px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+ .face-btn {
+     display: inline-block;
+     text-align: center;
+     background-color: #1e88e5;
+     color: white;
+     padding: 10px 20px;
+     border-radius: 8px;
+     text-decoration: none;
+     transition: 0.3s ease;
+     font-weight: 600;
+     font-family: 'Poppins', sans-serif;
+ }
+
+ .face-btn:hover {
+     background-color: #1565c0;
+ }

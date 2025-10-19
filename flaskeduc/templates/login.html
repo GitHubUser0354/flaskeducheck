@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pasig Campus</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+     <div class="formwrap">
+        <div class="hotdog">
+            <input id="tab-1" type="radio" name="tab" class="students" checked>
+            <label for="tab-1" class="tab">STUDENTS</label>
+            <input id="tab-2" type="radio" name="tab" class="professors">
+            <label for="tab-2" class="tab">PROFESSORS</label>
+            <div class="studentform">
+                <div class="studentshtml">
+                    <form method="POST" action="/login">
+                        <div class="group">
+                            <label for="student-id" class="label">Student ID</label>
+                            <input id="student-id" name="student_id" type="text" class="input" placeholder="Enter your student ID" required>
+                        </div>
+                        <div class="group">
+                            <label for="student-pass" class="label">Password</label>
+                            <input id="student-pass" name="password" type="password" class="input" placeholder="Enter your password" required>
+                        </div>
+                        <div class="group check-group">
+                            <input id="check" type="checkbox" class="check" checked>
+                            <label for="check"><span class="icon"></span> Keep me signed in</label>
+                        </div>
+                        <div class="group">
+                            <input type="submit" class="button" value="LOG IN">
+                        </div>
+                    </form>
+                    <div class="group">
+                        <button type="button" class="button secondary" onclick="window.location.href='{{url_for('auth.facialrecognition')}}'">FACIAL RECOGNITION</button>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="foot-lnk"><a href="#forgot">Forgot Password?</a></div>
+                    <div class="foot-lnk"><a href="{{url_for('auth.registerbasiceduc')}}">Don't have an account?</a></div>
+                </div>
+
+                <div class="professorshtml">
+                    <form method="POST" action="/admin">
+                        <div class="group">
+                            <label for="admin-id" class="label">Professor ID</label>
+                            <input id="admin-id" name="admin_id" type="text" class="input" placeholder="Enter your professor ID" required>
+                        </div>
+                        <div class="group">
+                            <label for="admin-pass" class="label">Password</label>
+                            <input id="admin-pass" name="password" type="password" class="input" placeholder="Enter your password" required>
+                        </div>
+                        <div class="group">
+                            <input type="submit" class="button" value="LOG IN">
+                        </div>
+                    </form>
+                    <div class="hr"></div>
+                    <div class="foot-lnk"><a href="#forgot">Forgot Password?</a></div>
+                    <div class="foot-lnk"><a href="{{url_for('auth.professor')}}">Sign up as professor</a></div>
+                    <div class="foot-lnk"><a href="{{url_for('auth.facialrecognition')}}">Facial Recognition</a></div>
+                    <div class="foot-lnk"><a href="{{url_for('auth.home')}}">Home</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Classes - Professor Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .header h1 {
+      color: #333;
+      font-size: 28px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background-color: #667eea;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #5568d3;
+      transform: translateY(-2px);
+    }
+
+    .classes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .class-card {
+      background: white;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      border-top: 4px solid #667eea;
+    }
+
+    .class-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .class-code {
+      background: #667eea;
+      color: white;
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .class-name {
+      color: #333;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .class-details {
+      color: #666;
+      font-size: 13px;
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .detail-item:last-child {
+      border-bottom: none;
+    }
+
+    .detail-label {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .detail-value {
+      color: #666;
+    }
+
+    .class-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+
+    .action-btn-primary {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .action-btn-primary:hover {
+      background-color: #218838;
+    }
+
+    .action-btn-secondary {
+      background-color: #17a2b8;
+      color: white;
+    }
+
+    .action-btn-secondary:hover {
+      background-color: #138496;
+    }
+
+    .no-classes {
+      text-align: center;
+      padding: 60px 20px;
+      background: white;
+      border-radius: 10px;
+      color: #999;
+    }
+
+    .no-classes p {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .no-classes small {
+      display: block;
+      color: #bbb;
+      margin-top: 10px;
+    }
+
+    .flash-container {
+      margin-bottom: 20px;
+    }
+
+    .flash {
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .flash.info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+
+    @media (max-width: 768px) {
+      .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-buttons {
+        width: 100%;
+      }
+
+      .nav-buttons .btn {
+        flex: 1;
+        text-align: center;
+      }
+
+      .classes-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .class-actions {
+        flex-direction: column;
+      }
+
+      .action-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-container">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="header">
+      <div class="header-top">
+        <h1>📚 My Classes</h1>
+        <div class="nav-buttons">
+          <a href="{{ url_for('auth.professor_dashboard') }}" class="btn">⬅️ Back to Dashboard</a>
+        </div>
+      </div>
+    </div>
+
+    {% if subjects %}
+      <div class="classes-grid">
+        {% for subject in subjects %}
+          <div class="class-card">
+            <div class="class-code">{{ subject.code }}</div>
+            <div class="class-name">{{ subject.name }}</div>
+            
+            <div class="class-details">
+              <div class="detail-item">
+                <span class="detail-label">Course:</span>
+                <span class="detail-value">{{ subject.course }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Level:</span>
+                <span class="detail-value">{{ subject.level }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Units:</span>
+                <span class="detail-value">{{ subject.units }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Instructor:</span>
+                <span class="detail-value">{{ subject.instructor }}</span>
+              </div>
+            </div>
+
+            <div class="class-actions">
+              <a href="{{ url_for('auth.professor_class_students', subject_id=subject.id) }}" class="action-btn action-btn-primary">
+                👥 View Students
+              </a>
+              <a href="{{ url_for('auth.professor_class_students', subject_id=subject.id) }}" class="action-btn action-btn-secondary">
+                📊 Post Grades
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="no-classes">
+        <p>📭 No classes assigned</p>
+        <small>Contact the administrator to have classes assigned to your account.</small>
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>
